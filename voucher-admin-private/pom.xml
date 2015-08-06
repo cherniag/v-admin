@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-  <groupId>com.mq.google-apps</groupId>
-  <artifactId>voucher-admin</artifactId>
-    <version>1.0</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mq.google-apps</groupId>
+        <artifactId>voucher-admin</artifactId>
+        <version>1.0</version>
+    </parent>
 
-  <artifactId>voucher-admin-private</artifactId>
-  <packaging>war</packaging>
-  <version>1.0</version>
+    <artifactId>voucher-admin-private</artifactId>
+    <packaging>war</packaging>
 
-  <name>voucher-admin-private</name>
-
-
- 
     <dependencies>
         <!-- Compile/runtime dependencies -->
+        <dependency>
+            <groupId>com.mq.google-apps</groupId>
+            <artifactId>voucher-admin-core</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-api-1.0-sdk</artifactId>
             <version>${appengine.target.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-endpoints</artifactId>
+            <version>${appengine.target.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.objectify</groupId>
+            <artifactId>objectify</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -29,32 +47,24 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>3.0.1</version>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
-        <dependency>
-            <groupId>net.sf.jsr107cache</groupId>
-            <artifactId>jsr107cache</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <version>3.1.4</version>
-        </dependency>  
-        <dependency>
-            <groupId>com.google.appengine.orm</groupId>
-            <artifactId>datanucleus-appengine</artifactId>
-            <version>2.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-api-jdo</artifactId>
-            <version>3.1.3</version>
-        </dependency>      
 
         <!-- Test Dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>2.0.2-beta</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-testing</artifactId>
@@ -68,13 +78,29 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
- 
+
     <build>
+        <!-- for hot reload of the web application-->
+        <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>display-dependency-updates</goal>
+                            <goal>display-plugin-updates</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <version>2.5.1</version>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -83,15 +109,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>2.4</version>
                 <configuration>
-                    <archiveClasses>false</archiveClasses>
+                    <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>
                     <webResources>
-                        <!-- in order to interpolate version from pom into appengine-web.xml -->
                         <resource>
-                            <directory>${basedir}/src/main/webapp/WEB-INF</directory>
-                            <filtering>true</filtering>
-                            <targetPath>WEB-INF</targetPath>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>${project.build.directory}/generated-sources/appengine-endpoints</directory>
+                            <!-- the list has a default value of ** -->
+                            <includes>
+                                <include>WEB-INF/*.discovery</include>
+                                <include>WEB-INF/*.api</include>
+                            </includes>
                         </resource>
                     </webResources>
                 </configuration>
@@ -100,18 +129,30 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.target.version}</version>
-                <configuration>                                     
-                    <enableJarClasses>true</enableJarClasses>
+                <configuration>
+                    <enableJarClasses>false</enableJarClasses>
+                    <version>1</version>
+                    <address>127.0.0.1</address>
+                    <port>9002</port>
+                    <jvmFlags>
+                        <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=9102,server=y,suspend=n</jvmFlag>
+                    </jvmFlags>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
                         <goals>
-                            <goal>enhance</goal>
+                            <goal>endpoints_get_discovery_doc</goal>
                         </goals>
                     </execution>
                 </executions>
-
+            </plugin>
+            <plugin>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>gcloud-maven-plugin</artifactId>
+                <version>0.9.58.v20150505</version>
+                <configuration>
+                    <set_default>true</set_default>
+                </configuration>
             </plugin>
         </plugins>
     </build>

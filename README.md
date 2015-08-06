@@ -1,5 +1,5 @@
 appengine-modules-sample-java
-
+https://github.com/GoogleCloudPlatform/appengine-modules-sample-java
 
 It has 2 web apps each deployed to a different module: guestbook and shardedcounter.
 

@@ -8,7 +8,7 @@
   <name>voucher-admin</name>
   
   <properties>
-    <appengine.app.version>1</appengine.app.version>
+    <appengine.app.version>3</appengine.app.version>
     <appengine.target.version>1.9.24</appengine.target.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -16,5 +16,6 @@
     <module>voucher-admin-ear</module>
     <module>voucher-admin-public</module>
     <module>voucher-admin-private</module>
+    <module>voucher-admin-core</module>
   </modules>
 </project>

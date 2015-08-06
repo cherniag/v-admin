@@ -9,15 +9,12 @@ import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
 import com.mq.gae.voucher.admin.api.AuthorizationService;
 import com.mq.gae.voucher.admin.api.Constants;
-import com.mq.gae.voucher.admin.api.dtos.ProductDto;
-import com.mq.gae.voucher.admin.api.dtos.UserDto;
 
 import javax.inject.Named;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static com.google.api.server.spi.config.ApiMethod.HttpMethod.GET;
-import static com.google.api.server.spi.config.ApiMethod.HttpMethod.PUT;
 
 /**
  * Author: Gennadii Cherniaiev
@@ -49,16 +46,4 @@ public class VouchersEndpoint {
         return voucherService.findAll(communityId, campaignId, batchId, page, size);
     }
 
-    @ApiMethod(name = "communities.campaigns.batches.vouchers.redeem",
-            path = "communities/{communityId}/vouchers/{voucherCode}/redeem",
-            httpMethod = PUT)
-    public ProductDto redeem(@Named("communityId") long communityId,
-                                       @Named("voucherCode") String voucherCode,
-                                       UserDto userDto,
-                                       User user) throws EntityNotFoundException, OAuthRequestException {
-        logger.info("redeem communityId:" + communityId + ", voucherCode:" + voucherCode + ", userDto:" + userDto);
-        authorizationService.authorize(user);
-        long redeem = voucherService.redeem(communityId, voucherCode, userDto.id, userDto.userName);
-        return new ProductDto(redeem);
-    }
 }
