@@ -39,14 +39,14 @@ public class BatchService {
     }
 
 
-    public Batch findOne(long communityId, long campaignId, Long batchId) throws EntityNotFoundException {
+    public Batch findOne(long communityId, long campaignId, Long batchId) {
         Key<Community> communityKey = Key.create(Community.class, communityId);
         Key<Campaign> campaignKey = Key.create(communityKey, Campaign.class, campaignId);
         Key<Batch> batchKey = Key.create(campaignKey, Batch.class, batchId);
         return ofy().load().key(batchKey).now();
     }
 
-    public List<Batch> findAll(long communityId, long campaignId, int page, int size) throws EntityNotFoundException {
+    public List<Batch> findAll(long communityId, long campaignId, int page, int size) {
         Key<Community> communityKey = Key.create(Community.class, communityId);
         Key<Campaign> campaignKey = Key.create(communityKey, Campaign.class, campaignId);
         logger.info("campaignKey: " + campaignKey.getString());

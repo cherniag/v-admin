@@ -1,14 +1,10 @@
 package com.mq.gae.voucher.admin.api.batches;
 
-import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.ApiMethod.HttpMethod;
-import com.google.api.server.spi.config.DefaultValue;
-import com.google.api.server.spi.config.Nullable;
+import com.google.api.server.spi.config.*;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
-import com.mq.gae.voucher.admin.api.AbstractEndPoint;
+import com.mq.gae.voucher.admin.api.AbstractEndpoint;
 import com.mq.gae.voucher.admin.api.AuthorizationService;
 import com.mq.gae.voucher.admin.api.Constants;
 
@@ -27,7 +23,17 @@ import static com.google.api.server.spi.config.ApiMethod.HttpMethod.POST;
  * <p/>
  * Check oauth2 working: https://developers.google.com/oauthplayground
  */
-public class BatchesEndpoint extends AbstractEndPoint{
+@Api(name = "voucheradmin",
+        version = "v1",
+        title = "Private API",
+        description = "Private API is used for voucher management",
+        scopes = {Constants.EMAIL_SCOPE}, // Access to OAuth2 API to view your email address
+        clientIds = {
+                Constants.WEB_CLIENT_ID,
+                Constants.API_EXPLORER_CLIENT_ID,      // for api explorer
+                Constants.SERVICE_ACCOUNT_CLIENT_ID})  // service account client id
+//@ApiReference(AbstractEndpoint.class)
+public class BatchesEndpoint {
     static final Logger logger = Logger.getLogger(BatchesEndpoint.class.getName());
     BatchService batchService = BatchService.getInstance();
     AuthorizationService authorizationService = AuthorizationService.getInstance();
@@ -39,7 +45,7 @@ public class BatchesEndpoint extends AbstractEndPoint{
     public Batch getOne(@Named("communityId") long communityId,
                         @Named("campaignId") long campaignId,
                         @Named("batchId") long batchId,
-                        User user) throws EntityNotFoundException, OAuthRequestException {
+                        User user) throws OAuthRequestException {
         logger.info("getOne communityId:" + communityId + ", campaignId:" + campaignId + ", batchId:" + batchId);
         authorizationService.authorize(user);
         return batchService.findOne(communityId, campaignId, batchId);

@@ -1,7 +1,9 @@
 package com.mq.gae.voucher.admin.api.campaigns;
 
+import com.google.api.server.spi.response.BadRequestException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.cmd.Query;
 import com.mq.gae.voucher.admin.api.batches.BatchesEndpoint;
 import com.mq.gae.voucher.admin.api.communities.Community;
 import com.mq.gae.voucher.admin.api.vouchers.VoucherService;
@@ -33,10 +35,19 @@ public class CampaignService {
         return ofy().load().key(campaignKey).now();
     }
 
-    public List<Campaign> findAll(long communityId, int page, int size) {
+    public List<Campaign> findAll(long communityId, int page, int size, String sorting) throws BadRequestException {
         Key<Community> communityKey = Key.create(Community.class, communityId);
         logger.info("communityKey: " + communityKey.getString());
-        return ofy().load().type(Campaign.class).ancestor(communityKey).offset(page * size).limit(size).list();
+
+        if(!Campaign.sortFields.contains(sorting)) {
+            throw new BadRequestException("Sort column not valid");
+        }
+
+        Query<Campaign> campaignQuery = ofy().load().type(Campaign.class).ancestor(communityKey);
+        if(sorting != null) {
+            campaignQuery = campaignQuery.order(sorting);
+        }
+        return campaignQuery.offset(page * size).limit(size).list();
     }
 
     public void createCampaign(Campaign campaign, long communityId) {

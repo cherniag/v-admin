@@ -39,7 +39,7 @@ public class VouchersRedemptionEndpoint {
     public ProductDto redeem(@Named("communityId") long communityId,
                                        @Named("voucherCode") String voucherCode,
                                        UserDto userDto,
-                                       User user) throws EntityNotFoundException, OAuthRequestException {
+                                       User user) throws OAuthRequestException {
         logger.info("redeem communityId:" + communityId + ", voucherCode:" + voucherCode + ", userDto:" + userDto);
         authorizationService.authorize(user);
         long redeem = voucherService.redeem(communityId, voucherCode, userDto.id, userDto.userName);

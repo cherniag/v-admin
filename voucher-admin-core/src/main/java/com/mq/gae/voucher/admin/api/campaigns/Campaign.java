@@ -2,10 +2,11 @@ package com.mq.gae.voucher.admin.api.campaigns;
 
 import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.*;
 import com.mq.gae.voucher.admin.api.communities.Community;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: Gennadii Cherniaiev
@@ -13,15 +14,26 @@ import com.mq.gae.voucher.admin.api.communities.Community;
  */
 @Entity
 public class Campaign {
+
+    public static Set<String> sortFields = new HashSet<String>(){{
+        add("name");
+        add("-name");
+    }};
+
     @Id
     public Long id;
+    @Index
     public String name;
     @JsonIgnore
     @Parent
     public Ref<Community> communityRef;
+    @Index
     public Long productId;
     public Boolean isActive;
-
+    @Unindex
+    public String deeplinkUrl;
+    @Unindex
+    public String redemptionPageUrl;
 
     @Override
     public String toString() {
@@ -31,6 +43,8 @@ public class Campaign {
                 ", communityRef=" + communityRef +
                 ", productId=" + productId +
                 ", isActive=" + isActive +
+                ", deeplinkUrl='" + deeplinkUrl + '\'' +
+                ", redemptionPageUrl='" + redemptionPageUrl + '\'' +
                 '}';
     }
 }

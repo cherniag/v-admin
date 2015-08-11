@@ -6,7 +6,7 @@ import com.google.api.server.spi.config.Api;
  * Author: Gennadii Cherniaiev
  * Date: 8/11/2015
  */
-@Api(name = "voucheradmin",
+/*@Api(name = "voucheradmin",
         version = "v1",
         title = "Private API",
         description = "Private API is used for voucher management",
@@ -14,6 +14,7 @@ import com.google.api.server.spi.config.Api;
         clientIds = {
                 Constants.WEB_CLIENT_ID,
                 Constants.API_EXPLORER_CLIENT_ID,      // for api explorer
-                Constants.SERVICE_ACCOUNT_CLIENT_ID})  // service account client id
-public class AbstractEndPoint {
+                Constants.SERVICE_ACCOUNT_CLIENT_ID})  // service account client id*/
+public class AbstractEndpoint {
+
 }

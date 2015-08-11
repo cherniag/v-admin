@@ -1,13 +1,11 @@
 package com.mq.gae.voucher.admin.api.campaigns;
 
-import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.DefaultValue;
-import com.google.api.server.spi.config.Nullable;
+import com.google.api.server.spi.config.*;
+import com.google.api.server.spi.response.BadRequestException;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
-import com.mq.gae.voucher.admin.api.AbstractEndPoint;
+import com.mq.gae.voucher.admin.api.AbstractEndpoint;
 import com.mq.gae.voucher.admin.api.AuthorizationService;
 import com.mq.gae.voucher.admin.api.Constants;
 
@@ -22,7 +20,17 @@ import static com.google.api.server.spi.config.ApiMethod.HttpMethod.*;
  * Author: Gennadii Cherniaiev
  * Date: 8/4/2015
  */
-public class CampaignEndpoint extends AbstractEndPoint{
+@Api(name = "voucheradmin",
+        version = "v1",
+        title = "Private API",
+        description = "Private API is used for voucher management",
+        scopes = {Constants.EMAIL_SCOPE}, // Access to OAuth2 API to view your email address
+        clientIds = {
+                Constants.WEB_CLIENT_ID,
+                Constants.API_EXPLORER_CLIENT_ID,      // for api explorer
+                Constants.SERVICE_ACCOUNT_CLIENT_ID})  // service account client id
+//@ApiReference(AbstractEndpoint.class)
+public class CampaignEndpoint {
     static final Logger logger = Logger.getLogger(CampaignEndpoint.class.getName());
     CampaignService campaignService = CampaignService.getInstance();
     AuthorizationService authorizationService = AuthorizationService.getInstance();
@@ -32,8 +40,8 @@ public class CampaignEndpoint extends AbstractEndPoint{
             path = "communities/{communityId}/campaigns/{campaignId}",
             httpMethod = GET)
     public Campaign getOne(@Named("communityId") long communityId,
-                                @Named("campaignId") long campaignId,
-                                User user) throws EntityNotFoundException, OAuthRequestException {
+                           @Named("campaignId") long campaignId,
+                           User user) throws OAuthRequestException {
         logger.info("getOne communityId:" + communityId + ", campaignId:" + campaignId);
         authorizationService.authorize(user);
         return campaignService.findOne(communityId, campaignId);
@@ -43,12 +51,13 @@ public class CampaignEndpoint extends AbstractEndPoint{
             path = "communities/{communityId}/campaigns",
             httpMethod = GET)
     public List<Campaign> getAll(@Named("communityId") long communityId,
-                                       @Nullable @DefaultValue("0") @Named("page") int page,
-                                       @Nullable @DefaultValue("1000000") @Named("size") int size,
-                                       User user) throws EntityNotFoundException, OAuthRequestException {
-        logger.info("getAll communityId:" + communityId + ", page:" + page + ", size:" + size);
+                                 @Named("page") int page,
+                                 @Named("size") int size,
+                                 @Nullable @Named("sorting") String sorting,
+                                 User user) throws OAuthRequestException, BadRequestException {
+        logger.info("getAll communityId:" + communityId + ", page:" + page + ", size:" + size + ", sorting:" + sorting);
         authorizationService.authorize(user);
-        return campaignService.findAll(communityId, page, size);
+        return campaignService.findAll(communityId, page, size, sorting);
     }
 
     @ApiMethod(name = "communities.campaigns.create",
@@ -56,7 +65,7 @@ public class CampaignEndpoint extends AbstractEndPoint{
             httpMethod = POST)
     public void create(@Named("communityId") long communityId,
                        Campaign campaign,
-                       User user) throws ParseException, OAuthRequestException {
+                       User user) throws OAuthRequestException {
         logger.info("create communityId:" + communityId + ", campaign:" + campaign);
         authorizationService.authorize(user);
         campaignService.createCampaign(campaign, communityId);
@@ -67,7 +76,7 @@ public class CampaignEndpoint extends AbstractEndPoint{
             httpMethod = PUT)
     public Campaign activate(@Named("communityId") long communityId,
                              @Named("campaignId") long campaignId,
-                             User user) throws ParseException, OAuthRequestException {
+                             User user) throws OAuthRequestException {
         logger.info("activate communityId:" + communityId + ", campaignId:" + campaignId);
         authorizationService.authorize(user);
         return campaignService.changeStatus(communityId, campaignId, true);
