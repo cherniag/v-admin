@@ -5,6 +5,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
+import com.mq.gae.voucher.admin.api.AbstractEndPoint;
 import com.mq.gae.voucher.admin.api.AuthorizationService;
 import com.mq.gae.voucher.admin.api.Constants;
 
@@ -19,14 +20,7 @@ import static com.google.api.server.spi.config.ApiMethod.HttpMethod.*;
  * Author: Gennadii Cherniaiev
  * Date: 8/4/2015
  */
-@Api(name = "voucheradmin",
-        version = "v2",
-        scopes = {Constants.EMAIL_SCOPE}, // Access to OAuth2 API to view your email address
-        clientIds = {
-                Constants.WEB_CLIENT_ID,
-                Constants.API_EXPLORER_CLIENT_ID,
-                Constants.SERVICE_ACCOUNT_CLIENT_ID})  // service account client id
-public class CommunityEndpoint {
+public class CommunityEndpoint extends AbstractEndPoint{
         static final Logger logger = Logger.getLogger(CommunityEndpoint.class.getName());
         CommunityService communityService = CommunityService.getInstance();
         AuthorizationService authorizationService = AuthorizationService.getInstance();

@@ -16,17 +16,14 @@
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-endpoints</artifactId>
-            <version>${appengine.target.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
             <artifactId>objectify</artifactId>
-            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
         </dependency>
         <!-- for client request! -->
         <dependency>
@@ -46,7 +43,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${plugin.maven.compiler.version}</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>

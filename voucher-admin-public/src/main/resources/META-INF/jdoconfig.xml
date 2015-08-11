@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/jdo/jdoconfig http://java.sun.com/xml/ns/jdo/jdoconfig_3_0.xsd">
 
-    <persistence-manager-factory name="transactions-optional">
+<!--    <persistence-manager-factory name="transactions-optional">
         <property name="javax.jdo.PersistenceManagerFactoryClass"
                  value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
         <property name="javax.jdo.option.ConnectionURL" value="appengine"/>
@@ -11,5 +11,5 @@
         <property name="javax.jdo.option.NontransactionalWrite" value="true"/>
         <property name="javax.jdo.option.RetainValues" value="true"/>
         <property name="datanucleus.appengine.autoCreateDatastoreTxns" value="true"/>
-    </persistence-manager-factory>
+    </persistence-manager-factory>-->
 </jdoconfig>

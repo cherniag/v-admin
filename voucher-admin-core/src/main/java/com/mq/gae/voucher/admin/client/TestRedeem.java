@@ -23,8 +23,8 @@ public class TestRedeem {
     public static void main(String[] args) throws IOException, InterruptedException {
         String voucherCodesPath = "D:\\codes.txt";
         int threadCount = 10;
-        String serverAddress = "http://localhost:8080";
-        //String serverAddress = "https://voucher-admin.appspot.com";
+        //String serverAddress = "http://localhost:8080";
+        String serverAddress = "https://private-dot-voucher-admin.appspot.com";
 
         List<String> strings = Files.readAllLines(Paths.get(voucherCodesPath), Charset.defaultCharset());
 

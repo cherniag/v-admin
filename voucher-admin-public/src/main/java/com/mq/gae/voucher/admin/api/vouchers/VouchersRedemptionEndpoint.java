@@ -20,7 +20,9 @@ import static com.google.api.server.spi.config.ApiMethod.HttpMethod.PUT;
  * Date: 8/4/2015
  */
 @Api(name = "voucheradmin",
-        version = "v2",
+        version = "v1",
+        title = "Redemption public API",
+        description = "Redemption API is used for voucher redemption",
         scopes = {Constants.EMAIL_SCOPE}, // Access to OAuth2 API to view your email address
         clientIds = {
                 Constants.WEB_CLIENT_ID,

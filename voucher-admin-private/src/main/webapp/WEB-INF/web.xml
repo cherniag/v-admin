@@ -5,8 +5,7 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <!--<param-value>com.mq.gae.voucher.admin.api.batches.BatchesEndpoint,com.mq.gae.voucher.admin.api.campaigns.CampaignEndpoint,com.mq.gae.voucher.admin.api.vouchers.VouchersEndpoint,com.mq.gae.voucher.admin.api.communities.CommunityEndpoint</param-value>
-            --><param-value>com.mq.gae.voucher.admin.api.batches.BatchesEndpoint</param-value>
+            <param-value>com.mq.gae.voucher.admin.api.batches.BatchesEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
