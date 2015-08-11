@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <appengine.app.version>3</appengine.app.version>
         <appengine.target.version>1.9.24</appengine.target.version>
-        <objectify.version>4.0.1</objectify.version>
+        <objectify.version>5.1.6</objectify.version>
         <plugin.maven.gcloud.version>0.9.58.v20150505</plugin.maven.gcloud.version>
         <plugin.maven.compiler.version>3.1</plugin.maven.compiler.version>
         <plugin.maven.war.version>2.4</plugin.maven.war.version>

@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <datastore-indexes autoGenerate="true">
+    <!-- Campaign -->
     <datastore-index kind="Campaign" ancestor="true">
         <property name="name" direction="desc"/>
     </datastore-index>
     <datastore-index kind="Campaign" ancestor="true">
         <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Batch -->
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="name" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="createDate" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="generatedCodes" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="generatedCodes" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="creator.userName" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Batch" ancestor="true">
+        <property name="creator.userName" direction="asc"/>
     </datastore-index>
 </datastore-indexes>

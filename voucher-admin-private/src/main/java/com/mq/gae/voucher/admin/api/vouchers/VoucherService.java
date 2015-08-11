@@ -39,7 +39,7 @@ public class VoucherService {
 
     public void generate(Batch batch) {
         List<Voucher> vouchers = new ArrayList<>();
-        for (int i = 0; i < batch.getGenerateCodesCount(); i++) {
+        for (int i = 0; i < batch.getGeneratedCodes(); i++) {
             Voucher voucher = new Voucher(codeGenerator.generate());
             voucher.batchRef = Ref.create(batch);
             vouchers.add(voucher);

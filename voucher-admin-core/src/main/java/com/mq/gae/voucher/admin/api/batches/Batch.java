@@ -1,18 +1,13 @@
 package com.mq.gae.voucher.admin.api.batches;
 
-import com.google.api.server.spi.config.ApiResourceProperty;
 import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.*;
 import com.mq.gae.voucher.admin.api.campaigns.Campaign;
-import com.mq.gae.voucher.admin.api.vouchers.Voucher;
 
+import javax.persistence.Embedded;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Author: Gennadii Cherniaiev
@@ -25,12 +20,20 @@ public class Batch implements Serializable {
     @JsonIgnore
     @Parent
     Ref<Campaign> campaignRef;
+    @Index
     String name;
-    Long generateCodesCount;
+    @Index
+    Long generatedCodes;
+    @Index
     Date createDate;
+    @Unindex
     Date startDate;
+    @Unindex
     Date endDate;
-    String owner;
+    @Embedded
+    @Unindex
+    Creator creator;
+    @Unindex
     Boolean isActive;
 
     public Batch() {
@@ -52,12 +55,12 @@ public class Batch implements Serializable {
         this.name = name;
     }
 
-    public Long getGenerateCodesCount() {
-        return generateCodesCount;
+    public Long getGeneratedCodes() {
+        return generatedCodes;
     }
 
-    public void setGenerateCodesCount(Long generateCodesCount) {
-        this.generateCodesCount = generateCodesCount;
+    public void setGeneratedCodes(Long generatedCodes) {
+        this.generatedCodes = generatedCodes;
     }
 
     public Date getCreateDate() {
@@ -84,12 +87,12 @@ public class Batch implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getOwner() {
-        return owner;
+    public Creator getCreator() {
+        return creator;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setCreator(Creator creator) {
+        this.creator = creator;
     }
 
     public Boolean getIsActive() {
@@ -113,11 +116,11 @@ public class Batch implements Serializable {
         return "Batch{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", generateCodesCount=" + generateCodesCount +
+                ", generatedCodes=" + generatedCodes +
                 ", createDate=" + createDate +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", owner='" + owner + '\'' +
+                ", creator='" + creator + '\'' +
                 ", isActive='" + isActive + '\'' +
                 '}';
     }
