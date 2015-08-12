@@ -1,6 +1,7 @@
 package com.mq.gae.voucher.admin.api.batches;
 
 import com.google.api.server.spi.config.*;
+import com.google.api.server.spi.response.BadRequestException;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
@@ -56,12 +57,13 @@ public class BatchesEndpoint {
             httpMethod = GET)
     public List<Batch> getAll(@Named("communityId") long communityId,
                               @Named("campaignId") long campaignId,
-                              @Nullable @DefaultValue("0") @Named("page") int page,
-                              @Nullable @DefaultValue("1000000") @Named("size") int size,
-                              User user) throws EntityNotFoundException, OAuthRequestException {
-        logger.info("getAll communityId:" + communityId + ", campaignId:" + campaignId + ", page:" + page + ", size:" + size);
+                              @Named("page") int page,
+                              @Named("size") int size,
+                              @Nullable @Named("sorting") String sorting,
+                              User user) throws OAuthRequestException, BadRequestException {
+        logger.info("getAll communityId:" + communityId + ", campaignId:" + campaignId + ", page:" + page + ", size:" + size + ", sorting:" + sorting);
         authorizationService.authorize(user);
-        return batchService.findAll(communityId, campaignId, page, size);
+        return batchService.findAll(communityId, campaignId, page, size, sorting);
     }
 
     @ApiMethod(name = "communities.campaigns.batches.create",
@@ -70,7 +72,7 @@ public class BatchesEndpoint {
     public void create(@Named("communityId") long communityId,
                        @Named("campaignId") long campaignId,
                        Batch batch,
-                       User user) throws ParseException, OAuthRequestException {
+                       User user) throws OAuthRequestException {
         logger.info("create communityId:" + communityId + ", campaignId:" + campaignId + ", batch:" + batch);
         authorizationService.authorize(user);
         batchService.createBatch(batch, communityId, campaignId);
@@ -82,7 +84,7 @@ public class BatchesEndpoint {
     public Batch activate(@Named("communityId") long communityId,
                           @Named("campaignId") long campaignId,
                           @Named("batchId") long batchId,
-                          User user) throws ParseException, OAuthRequestException {
+                          User user) throws OAuthRequestException {
         logger.info("activate communityId:" + communityId + ", campaignId:" + campaignId + ", batchId:" + batchId);
         authorizationService.authorize(user);
         return batchService.changeStatus(batchId, communityId, campaignId, true);
@@ -94,7 +96,7 @@ public class BatchesEndpoint {
     public Batch deactivate(@Named("communityId") long communityId,
                             @Named("campaignId") long campaignId,
                             @Named("batchId") long batchId,
-                            User user) throws ParseException, OAuthRequestException {
+                            User user) throws OAuthRequestException {
         logger.info("deactivate communityId:" + communityId + ", campaignId:" + campaignId + ", batchId:" + batchId);
         authorizationService.authorize(user);
         return batchService.changeStatus(batchId, communityId, campaignId, false);

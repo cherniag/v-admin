@@ -40,7 +40,7 @@ public class CampaignService {
         logger.info("communityKey: " + communityKey.getString());
 
         if(!Campaign.sortFields.contains(sorting)) {
-            throw new BadRequestException("Sort column not valid");
+            throw new BadRequestException("Sort column " + sorting + " not valid");
         }
 
         Query<Campaign> campaignQuery = ofy().load().type(Campaign.class).ancestor(communityKey);

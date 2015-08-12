@@ -8,6 +8,8 @@ import com.mq.gae.voucher.admin.api.campaigns.Campaign;
 import javax.persistence.Embedded;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: Gennadii Cherniaiev
@@ -15,6 +17,18 @@ import java.util.Date;
  */
 @Entity
 public class Batch implements Serializable {
+
+    public static Set<String> sortFields = new HashSet<String>(){{
+        add("name");
+        add("-name");
+        add("creator.userName");
+        add("-creator.userName");
+        add("createDate");
+        add("-createDate");
+        add("generatedCodes");
+        add("-generatedCodes");
+    }};
+
     @Id
     Long id;
     @JsonIgnore
@@ -30,7 +44,6 @@ public class Batch implements Serializable {
     Date startDate;
     @Unindex
     Date endDate;
-    @Embedded
     @Unindex
     Creator creator;
     @Unindex

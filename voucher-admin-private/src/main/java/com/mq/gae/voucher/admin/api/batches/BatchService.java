@@ -1,8 +1,10 @@
 package com.mq.gae.voucher.admin.api.batches;
 
+import com.google.api.server.spi.response.BadRequestException;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.cmd.Query;
 import com.mq.gae.voucher.admin.api.campaigns.Campaign;
 import com.mq.gae.voucher.admin.api.communities.Community;
 import com.mq.gae.voucher.admin.api.vouchers.VoucherService;
@@ -46,11 +48,20 @@ public class BatchService {
         return ofy().load().key(batchKey).now();
     }
 
-    public List<Batch> findAll(long communityId, long campaignId, int page, int size) {
+    public List<Batch> findAll(long communityId, long campaignId, int page, int size, String sorting) throws BadRequestException {
         Key<Community> communityKey = Key.create(Community.class, communityId);
         Key<Campaign> campaignKey = Key.create(communityKey, Campaign.class, campaignId);
         logger.info("campaignKey: " + campaignKey.getString());
-        return ofy().load().type(Batch.class).ancestor(campaignKey).offset(page * size).limit(size).list();
+
+        if(!Batch.sortFields.contains(sorting)) {
+            throw new BadRequestException("Sort column " + sorting + " not valid");
+        }
+
+        Query<Batch> batchQuery = ofy().load().type(Batch.class).ancestor(campaignKey);
+        if (sorting != null) {
+            batchQuery = batchQuery.order(sorting);
+        }
+        return batchQuery.offset(page * size).limit(size).list();
     }
 
     public Batch changeStatus(long batchId, long communityId, long campaignId, boolean isActive) {
